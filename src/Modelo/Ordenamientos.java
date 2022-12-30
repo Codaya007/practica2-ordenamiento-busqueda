@@ -20,7 +20,8 @@ public enum Ordenamientos {
     }
 
     //Añadir un método
-    public String getNombre() {
+    @Override
+    public String toString() {
         return nombre;
     }
 }

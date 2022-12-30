@@ -5,7 +5,12 @@
  */
 package Vista;
 
+import Controlador.ctrlOrdenamiento;
+import Modelo.Ordenamientos;
+import Modelo.Ordenes;
+import Vista.Tablas.ModeloTablaOrdenamiento;
 import Vista.Utilidades.Utilidades;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,18 +18,53 @@ import Vista.Utilidades.Utilidades;
  */
 public class frmOrdenamiento extends javax.swing.JFrame {
 
+    ctrlOrdenamiento controlador = new ctrlOrdenamiento();
+    ModeloTablaOrdenamiento modeloTablaOrdenamiento = new ModeloTablaOrdenamiento();
+    ModeloTablaOrdenamiento modeloTablaOrdenados = new ModeloTablaOrdenamiento();
+
     /**
      * Creates new form frmOrdenamiento
      */
-    public final void cargarCombos(){
-        Utilidades.cargarComboOrdenamientos(cbxTipoOrdenamiento);
-        Utilidades.cargarComboOrdenes(cbxOrden);
-    }
-    
     public frmOrdenamiento() {
         initComponents();
         this.setLocationRelativeTo(null);
         cargarCombos();
+        txtInformacionEjecucion.setLineWrap(true);
+        txtInformacionEjecucion.setWrapStyleWord(true);
+        cargarTabla();
+        cargarTablaResultados();
+    }
+
+    private void cargarTabla() {
+        if (controlador != null) {
+            modeloTablaOrdenamiento.setDatos(controlador.getDatos());
+            tblNumeros.setModel(modeloTablaOrdenamiento);
+            tblNumeros.updateUI();
+            jScrollPane1.setVisible(true);
+        } else {
+            jScrollPane1.setVisible(false);
+        }
+    }
+
+    private void cargarTablaResultados() {
+        if (controlador != null) {
+            modeloTablaOrdenados.setDatos(controlador.getDatosOrdenados());
+            tblNumerosOrdenados.setModel(modeloTablaOrdenados);
+            tblNumerosOrdenados.updateUI();
+            jScrollPane1.setVisible(true);
+        } else {
+            jScrollPane1.setVisible(false);
+        }
+    }
+
+    public final void cargarCombos() {
+        Utilidades.cargarComboOrdenamientos(cbxTipoOrdenamiento);
+        Utilidades.cargarComboOrdenes(cbxOrden);
+    }
+
+    public void limpiarCampos() {
+        cbxTipoOrdenamiento.setSelectedIndex(0);
+        cbxOrden.setSelectedIndex(0);
     }
 
     /**
@@ -45,11 +85,14 @@ public class frmOrdenamiento extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
         txtCantidadDatos = new javax.swing.JTextField();
         cbxTipoOrdenamiento = new javax.swing.JComboBox<>();
         cbxOrden = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtInformacionEjecucion = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblNumerosOrdenados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Algortimos de ordenamiento");
@@ -69,8 +112,18 @@ public class frmOrdenamiento extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblNumeros);
 
         btnGenerarDatos.setText("Generar datos");
+        btnGenerarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarDatosActionPerformed(evt);
+            }
+        });
 
         btnOrdenar.setText("Ordenar datos");
+        btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdenarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Tipo de ordenamiento: ");
 
@@ -83,8 +136,6 @@ public class frmOrdenamiento extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("RESULTADOS OBTENIDOS");
-
-        jTextField1.setText("jTextField1");
 
         btnRegresar.setText("Regresar");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
@@ -109,78 +160,99 @@ public class frmOrdenamiento extends javax.swing.JFrame {
 
         cbxOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        txtInformacionEjecucion.setEditable(false);
+        txtInformacionEjecucion.setColumns(20);
+        txtInformacionEjecucion.setRows(5);
+        jScrollPane1.setViewportView(txtInformacionEjecucion);
+
+        tblNumerosOrdenados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tblNumerosOrdenados);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
-                        .addGap(98, 98, 98))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(cbxTipoOrdenamiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cbxOrden, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(txtCantidadDatos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(cbxTipoOrdenamiento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbxOrden, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtCantidadDatos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1)
-                        .addGap(57, 57, 57))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(99, 99, 99)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(35, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(btnGenerarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                        .addComponent(btnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(146, 146, 146)
+                        .addComponent(btnGenerarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel4)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(9, 9, 9)
+                                .addComponent(txtCantidadDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbxTipoOrdenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbxOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(txtCantidadDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbxTipoOrdenamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbxOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGenerarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGenerarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -199,6 +271,81 @@ public class frmOrdenamiento extends javax.swing.JFrame {
     private void cbxTipoOrdenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoOrdenamientoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxTipoOrdenamientoActionPerformed
+
+    private void btnGenerarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarDatosActionPerformed
+        // TODO add your handling code here:
+        try {
+            // obtengo los valores de los inputs para determinar los ordenamientos
+            try {
+                Integer cantidadDatos = Integer.valueOf(txtCantidadDatos.getText());
+
+                System.out.println(cantidadDatos);
+                System.out.println(txtCantidadDatos.getText());
+
+                controlador.setNumeroDatos(cantidadDatos);
+
+                controlador.volverAGenerarDatos();
+                cargarTabla();
+            } catch (Error e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(
+                        null,
+                        e.getMessage(),
+                        "Ha ocurrido un error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    "Ha ocurrido un error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_btnGenerarDatosActionPerformed
+
+    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            try {
+                // obtengo los valores de los inputs para determinar los ordenamientos
+                Ordenamientos ordenamiento = Ordenamientos.QUICK.toString().equals(cbxTipoOrdenamiento.getSelectedItem().toString())
+                        ? Ordenamientos.QUICK : Ordenamientos.SHELL;
+                Ordenes orden = Ordenes.valueOf(cbxOrden.getSelectedItem().toString());
+
+                controlador.setOrden(orden);
+                controlador.setOrdenamiento(ordenamiento);
+
+                // Ordeno los datos
+                controlador.ordenarDatos();
+
+                // Actualizo la tabla con los datos ordenados
+                cargarTablaResultados();
+
+                // Y muestro la informacion sobre el ordenamiento realizado
+                txtInformacionEjecucion.setText(controlador.informacionOrdenamiento());
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(
+                        null,
+                        e.getMessage(),
+                        "Ha ocurrido un error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } catch (Error e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    "Ha ocurrido un error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_btnOrdenarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,9 +393,12 @@ public class frmOrdenamiento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane3;
     public javax.swing.JTable tblNumeros;
+    public javax.swing.JTable tblNumerosOrdenados;
     public javax.swing.JTextField txtCantidadDatos;
+    private javax.swing.JTextArea txtInformacionEjecucion;
     // End of variables declaration//GEN-END:variables
 }

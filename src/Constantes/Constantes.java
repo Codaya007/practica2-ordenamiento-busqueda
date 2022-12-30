@@ -9,7 +9,7 @@ package Constantes;
  *
  * @author vivic
  */
-public class Gatos {
+public class Constantes {
 
     final public static String colores[] = {"Naranja", "Negro", "Atigrado", "Blanco", "Gris"};
     final public static String nombresHembras[] = {
@@ -27,5 +27,10 @@ public class Gatos {
     final public static String razas[] = {
         "Abisinio", "Americano de pelo duro", "Asiático",
         "Azul ruso", "Balinés", "Bengalí", "Himalayo"
+    };
+    final public static String tiposDeDatosNumericos[] = {
+        "Float", 
+        "Integer", 
+        "Long", 
     };
 }

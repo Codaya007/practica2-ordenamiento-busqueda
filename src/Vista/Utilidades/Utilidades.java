@@ -30,7 +30,7 @@ public class Utilidades {
         cbx.removeAllItems();
 
         for (Ordenamientos item : Ordenamientos.values()) {
-            cbx.addItem(item.getNombre());
+            cbx.addItem(item);
         }
 
         return cbx;

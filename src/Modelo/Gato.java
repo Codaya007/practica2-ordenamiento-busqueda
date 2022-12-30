@@ -11,11 +11,21 @@ package Modelo;
  */
 public class Gato {
 
+    private static Integer contador = 0;
+    private Integer ID;
     private String nombre;
     private String color;
     private String sexo;
     private String fechaNacimiento;
     private String raza;
+
+    public Gato() {
+        ID = contador++;
+    }
+
+    public Integer getID() {
+        return ID;
+    }
 
     public String getNombre() {
         return nombre;
@@ -56,10 +66,12 @@ public class Gato {
     public void setRaza(String raza) {
         this.raza = raza;
     }
-    
+
     @Override
-    public String toString(){
-        return this.nombre + " -> Color " + this.color + ", raza " + this.raza;
+    public String toString() {
+        return this.nombre + " - " + this.color
+                + " - " + this.raza + " - " + this.sexo
+                + " - " + this.fechaNacimiento;
     }
 
 }

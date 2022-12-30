@@ -5,13 +5,21 @@
  */
 package Vista;
 
+import Controlador.ctrlBusqueda;
+import Modelo.Busquedas;
+import Vista.Tablas.ModeloTablaBusqueda;
 import Vista.Utilidades.Utilidades;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author vivic
  */
 public class frmBusqueda extends javax.swing.JFrame {
+
+    ctrlBusqueda controlador = new ctrlBusqueda();
+    ModeloTablaBusqueda modeloTablaBusqueda = new ModeloTablaBusqueda();
+    ModeloTablaBusqueda modeloTablaResultados = new ModeloTablaBusqueda();
 
     /**
      * Creates new form frmOrdenamiento
@@ -20,6 +28,37 @@ public class frmBusqueda extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         Utilidades.cargarComboBusquedas(cbxBusqueda);
+        txtInformacionEjecucion.setLineWrap(true);
+        txtInformacionEjecucion.setWrapStyleWord(true);
+        cargarTablaResultados();
+        cargarTabla();
+    }
+
+    private void cargarTabla() {
+        if (controlador != null) {
+            modeloTablaBusqueda.setDatos(controlador.getDatos());
+            tblNumeros.setModel(modeloTablaBusqueda);
+            tblNumeros.updateUI();
+            jScrollPane1.setVisible(true);
+        } else {
+            jScrollPane1.setVisible(false);
+        }
+    }
+
+    private void cargarTablaResultados() {
+        System.out.println("Cargando tabla resultados...");
+        if (controlador.getDatosEncontrados() != null) {
+            modeloTablaResultados.setDatos(controlador.getDatosEncontrados());
+            tblResultados.setModel(modeloTablaResultados);
+            tblResultados.updateUI();
+            jScrollPane1.setVisible(true);
+        } else {
+            jScrollPane1.setVisible(false);
+        }
+    }
+
+    public void limpiarCampos() {
+        cbxBusqueda.setSelectedIndex(0);
     }
 
     /**
@@ -34,17 +73,20 @@ public class frmBusqueda extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblNumeros = new javax.swing.JTable();
         btnGenerarDatos = new javax.swing.JButton();
-        btnOrdenar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         txtCantidadDatos = new javax.swing.JTextField();
         cbxBusqueda = new javax.swing.JComboBox<>();
         btnRegresar = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        txtBuscar = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtInformacionEjecucion = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblResultados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Algortimos de busqueda");
@@ -64,9 +106,19 @@ public class frmBusqueda extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblNumeros);
 
         btnGenerarDatos.setText("Generar datos");
+        btnGenerarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarDatosActionPerformed(evt);
+            }
+        });
 
-        btnOrdenar.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
-        btnOrdenar.setText("Buscar");
+        btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Tipo de búsqueda: ");
 
@@ -78,9 +130,7 @@ public class frmBusqueda extends javax.swing.JFrame {
         jLabel4.setText("PARAMETROS BUSQUEDA");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setText("RESULTADOS OBTENIDOS");
-
-        jTextField1.setText("jTextField1");
+        jLabel5.setText("RESULTADOS OBTENIDOS:");
 
         txtCantidadDatos.setText("20000");
         txtCantidadDatos.addActionListener(new java.awt.event.ActionListener() {
@@ -98,51 +148,70 @@ public class frmBusqueda extends javax.swing.JFrame {
             }
         });
 
-        jTextField2.setText("jTextField2");
+        txtInformacionEjecucion.setEditable(false);
+        txtInformacionEjecucion.setColumns(20);
+        txtInformacionEjecucion.setRows(5);
+        txtInformacionEjecucion.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jScrollPane1.setViewportView(txtInformacionEjecucion);
+
+        tblResultados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tblResultados);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                        .addGap(149, 149, 149))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCantidadDatos))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                                    .addComponent(cbxBusqueda, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGenerarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(105, 105, 105)
+                            .addComponent(btnGenerarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtCantidadDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(8, 8, 8))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(cbxBusqueda, 0, 172, Short.MAX_VALUE)
+                                    .addGap(103, 103, 103)))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
                         .addComponent(jLabel4)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -155,21 +224,22 @@ public class frmBusqueda extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnOrdenar))
-                        .addGap(18, 18, 18)
+                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar)))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnGenerarDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(15, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                            .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -184,6 +254,86 @@ public class frmBusqueda extends javax.swing.JFrame {
         this.setVisible(false);
         new frmPrincipal().setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnGenerarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarDatosActionPerformed
+        // TODO add your handling code here:
+        try {
+            try {
+                Integer cantidadDatos = Integer.valueOf(txtCantidadDatos.getText());
+
+                controlador.setNumeroDatos(cantidadDatos);
+
+                controlador.volverAGenerarDatos();
+                cargarTabla();
+            } catch (Error e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(
+                        null,
+                        e.getMessage(),
+                        "Ha ocurrido un error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    "Ha ocurrido un error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+    }//GEN-LAST:event_btnGenerarDatosActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        try {
+            try {
+                String query = txtBuscar.getText().trim();
+                Busquedas busqueda = cbxBusqueda.getSelectedItem().toString() == Busquedas.Binaria.toString() ? 
+                        Busquedas.Binaria : Busquedas.Lineal;
+
+                controlador.setTipoBusqueda(busqueda);
+                if (query.isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Ingrese el texto que desea buscar",
+                            "Informacion incompleta",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
+
+                controlador.buscarDato(query);
+                txtInformacionEjecucion.setText(controlador.getInformacionBusqueda());
+                cargarTablaResultados();
+                
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Los resultados encontrados se guardaron exitosamente en el archivo GatosEncontrados.json",
+                        "RESULTADOS GUARDADOS",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            } catch (Error e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(
+                        null,
+                        e.getMessage(),
+                        "Ha ocurrido un error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    "Ha ocurrido un error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -222,8 +372,8 @@ public class frmBusqueda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnBuscar;
     public javax.swing.JButton btnGenerarDatos;
-    public javax.swing.JButton btnOrdenar;
     public javax.swing.JButton btnRegresar;
     public javax.swing.JComboBox<String> cbxBusqueda;
     private javax.swing.JLabel jLabel1;
@@ -231,10 +381,13 @@ public class frmBusqueda extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JScrollPane jScrollPane3;
     public javax.swing.JTable tblNumeros;
+    public javax.swing.JTable tblResultados;
+    private javax.swing.JTextField txtBuscar;
     public javax.swing.JTextField txtCantidadDatos;
+    private javax.swing.JTextArea txtInformacionEjecucion;
     // End of variables declaration//GEN-END:variables
 }
